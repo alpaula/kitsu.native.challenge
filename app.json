@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "kitsu.native.challenge",
-    "slug": "kitsu.native.challenge",
+    "slug": "kitsuNativeChallenge",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
