@@ -1,5 +1,7 @@
 // Libs
 import { useEffect, useState } from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 // Components
 import Home from './screens/Home';
@@ -9,7 +11,6 @@ import Search from './screens/Search';
 const App = () => {
   const [animesList, setAnimesList] = useState([]);
   const [sliderPagination, setSliderPagination] = useState({});
-  const [currentScreen, setCurrentScreen] = useState('home');
   const [selectedAnime, setSelectedAnime] = useState(null);
 
   useEffect(() => {
@@ -37,45 +38,43 @@ const App = () => {
     }
   };
 
-  const renderScreen = () => {
-    switch (currentScreen) {
-      case 'home':
-        return (
-          <Home
-            animesList={animesList}
-            sliderPagination={sliderPagination}
-            setCurrentScreen={setCurrentScreen}
-            setSliderPagination={setSliderPagination}
-            setSelectedAnime={setSelectedAnime}
-          />
-        );
-      case 'search':
-        return (
-          <Search
-            setCurrentScreen={setCurrentScreen}
-          />
-        );
-      case 'anime':
-        return (
-          <AnimeDetails
-            item={selectedAnime}
-            setCurrentScreen={setCurrentScreen}
-          />
-        );
-      default:
-        return (
-          <Home
-            animesList={animesList}
-            sliderPagination={sliderPagination}
-            setCurrentScreen={setCurrentScreen}
-            setSliderPagination={setSliderPagination}
-            setSelectedAnime={setSelectedAnime}
-          />
-        );
-    }
-  }
+  const Stack = createNativeStackNavigator();
 
-  return renderScreen();
+  return (
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Home">
+        <Stack.Screen
+          name="Home"
+          options={{ headerShown: false }}
+        >
+          {props => <Home
+            {...props}
+            animesList={animesList}
+            sliderPagination={sliderPagination}
+            setSliderPagination={setSliderPagination}
+            setSelectedAnime={setSelectedAnime}
+          />}
+        </Stack.Screen>
+        <Stack.Screen
+          name="Search"
+          options={{ headerShown: false }}
+        >
+          {props => <Search
+            {...props}
+          />}
+        </Stack.Screen>
+        <Stack.Screen
+          name="Anime"
+          options={{ headerShown: false }}
+        >
+          {props => <AnimeDetails
+            {...props}
+            item={selectedAnime}
+          />}
+        </Stack.Screen>
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
 }
 
 export default App;

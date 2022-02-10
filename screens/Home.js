@@ -83,8 +83,8 @@ const AnimeName = styled.Text`
 `;
 
 const Home = ({
+	navigation,
 	setSelectedAnime,
-	setCurrentScreen,
 	animesList,
 	setSliderPagination,
 	sliderPagination
@@ -104,7 +104,7 @@ const Home = ({
 	const renderAnime = ({ item }) => {
 		const handleItem = () => {
 			setSelectedAnime(item);
-			setCurrentScreen('anime');
+			navigation.navigate('Anime')
 		};
 
 		return (
@@ -130,7 +130,7 @@ const Home = ({
 				/>
 			</CoverBox>
 			<SearchButton
-				onPress={() => setCurrentScreen('search')}
+				onPress={() => navigation.navigate('Search')}
 				accessibilityLabel="Search button"
 			>
 				<SearchIcon
@@ -147,7 +147,7 @@ const Home = ({
 				pagingEnabled={true}
 				showsHorizontalScrollIndicator={false}
 			/>
-			<StatusBar hidden />
+			<StatusBar />
 		</Container>
 	);
 }

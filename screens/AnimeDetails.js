@@ -59,13 +59,15 @@ const Synopsis = styled.Text`
 `;
 
 const AnimeDetails = ({
+	navigation,
 	item,
-	setCurrentScreen
 }) => (
 	<Container>
 		<StatusBar backgroundColor='#ec6fe6' />
 		<Header>
-			<BackButton onPress={() => setCurrentScreen('home')}>
+			<BackButton
+				onPress={() => navigation.navigate('Home')}
+			>
 				<BackIcon source={backIcon} />
 			</BackButton>
 			<AnimeTitle>{item.title}</AnimeTitle>
