@@ -19,13 +19,13 @@ const Header = styled.View`
 	align-items: center;
 	justify-content: center;
 	width: 100%;
-	margin-top: 30px;
-	padding: 24px 16px;
+	padding: 54px 16px 24px;
 	background-color: #ec6fe6;
 `;
 
 const BackButton = styled.TouchableOpacity`
 	position: absolute;
+	top: 48px;
 	left: 12px;
 	flex-direction: row;
 	justify-content: center;
@@ -63,7 +63,7 @@ const AnimeDetails = ({
 	item,
 }) => (
 	<Container>
-		<StatusBar backgroundColor='#ec6fe6' />
+		<StatusBar />
 		<Header>
 			<BackButton
 				onPress={() => navigation.navigate('Home')}
