@@ -1,72 +1,153 @@
 // Libs
+import { useEffect, useRef, useState } from 'react';
+import { FlatList, Dimensions } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
-import { useEffect, useState } from 'react';
-import { FlatList, Text, View, Dimensions } from 'react-native';
 import styled from 'styled-components/native';
 
+// Images
+import searchIcon from '../assets/search-icon.png';
+
 // Styles
-const Container = styled(View)`
+const Container = styled.View`
 	flex: 1;
-	background-color: #f0f;
+	justify-content: space-between;
+	align-items: center;
+	padding: ${Dimensions.get('window').width * .15}px ${Dimensions.get('window').width * .025}px;
+	padding-bottom: ${Dimensions.get('window').width * .05}px;
+`;
+
+const CoverBox = styled.View`
+	position: absolute;
 	justify-content: center;
 	align-items: center;
+	width: ${Dimensions.get('window').width}px;
+	height: ${Dimensions.get('window').height}px;
+`;
+
+const CoverImage = styled.Image`
+	flex: 1;
+	width: 100%;
+`;
+
+const SearchButton = styled.TouchableOpacity`
+	width: 32px;
+	height: 32px;
+	align-self: flex-end;
+	justify-content: center;
+	align-items: center;
+`;
+
+const SearchIcon = styled.Image`
+	flex: 1;
+	width: 100%;
+`;
+
+const AnimeButton = styled.TouchableWithoutFeedback`
+	align-items: center;
+	justify-content: flex-start;
+	width: ${Dimensions.get('window').width * .9}px;
+	height: ${Dimensions.get('window').height - 32}px;
+	margin: 0 ${Dimensions.get('window').width * .025}px;
+	margin-top: 24px;
 `;
 
 const AnimeItem = styled.View`
-	width: ${Dimensions.get(`window`).width * .9}px;
-	height: ${Dimensions.get(`window`).height * .75}px;
-	margin: ${Dimensions.get(`window`).width * .05}px;
-	background-color: #0ff;
 	align-items: center;
-	justify-content: center;
+	justify-content: flex-start;
+	width: ${Dimensions.get('window').width * .9}px;
+	height: ${Dimensions.get('window').height - 32}px;
+	margin: 0 ${Dimensions.get('window').width * .025}px;
+	margin-top: 24px;
 `;
 
-const Home = () => {
-	const [animesList, setAnimesList] = useState([]);
+const ImageBox = styled.View`
+	width: 100%;
+	height: 75%;
+	margin-bottom: 12px;
+	border-radius: 16px;
+	overflow: hidden;
+`;
 
-	useEffect(() => {
-		getAnimes();
-	}, []);
+const AnimeImage = styled.Image`
+	flex: 1;
+`;
 
-	const getAnimes = async () => {
-		try {
-			const response = await fetch('https://kitsu.io/api/edge/trending/anime');
-			const json = await response.json();
+const AnimeName = styled.Text`
+	padding: 5px 24px;
+	border-radius: 12px;
+	background-color: #FF50E5;
+	font-size: 20px;
+	font-style: italic;
+	font-weight: bold;
+	color: #fff;
+`;
 
-			const animes = json.data.map(anime => ({
-				id: anime.id,
-				canonicalTitle: anime.attributes.canonicalTitle,
-				synopsis: anime.attributes.synopsis,
-				posterImage: anime.attributes.posterImage.small,
-				coverImage: anime.attributes.coverImage.small,
-			}))
+const Home = ({
+	setSelectedAnime,
+	setCurrentScreen,
+	animesList,
+	setSliderPagination,
+	sliderPagination
+}) => {
+	const flatListRef = useRef();
 
-			setAnimesList(animes);
-		} catch (err) {
-			console.log('err: ', err);
-		}
+	const handleScroll = (ev) => {
+		const scrollX = ev.nativeEvent.contentOffset.x;
+
+		const currentSlider = (scrollX + Dimensions.get('window').width) / Dimensions.get('window').width;
+
+		const item = animesList[Math.round(currentSlider) - 1];
+
+		setSliderPagination(item);
 	};
 
 	const renderAnime = ({ item }) => {
+		const handleItem = () => {
+			setSelectedAnime(item);
+			setCurrentScreen('anime');
+		};
+
 		return (
-			<AnimeItem>
-				<Text>{item.canonicalTitle}</Text>
-			</AnimeItem>
+			<AnimeButton onPress={handleItem}>
+				<AnimeItem>
+					<ImageBox>
+						<AnimeImage source={{ uri: item.posterImage }} />
+					</ImageBox>
+					<AnimeName>{item.title}</AnimeName>
+				</AnimeItem>
+			</AnimeButton>
 		);
 	}
 
+	if (!sliderPagination) return null;
+
 	return (
 		<Container>
+			<CoverBox>
+				<CoverImage
+					source={{ uri: sliderPagination.coverImage }}
+					blurRadius={5}
+				/>
+			</CoverBox>
+			<SearchButton
+				onPress={() => setCurrentScreen('search')}
+				accessibilityLabel="Search button"
+			>
+				<SearchIcon
+					source={searchIcon}
+				/>
+			</SearchButton>
 			<FlatList
+				ref={flatListRef}
 				data={animesList}
 				renderItem={renderAnime}
 				keyExtractor={item => item.id}
 				horizontal={true}
-				showsHorizontalScrollIndicator={false}
-				// bounces={false}
+				onScroll={handleScroll}
 				pagingEnabled={true}
+				showsHorizontalScrollIndicator={false}
 			/>
-			{/* <StatusBar style="auto" /> */}
+			<StatusBar hidden />
 		</Container>
 	);
 }
