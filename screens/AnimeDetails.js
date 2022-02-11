@@ -19,7 +19,7 @@ const Header = styled.View`
 	align-items: center;
 	justify-content: center;
 	width: 100%;
-	padding: 54px 16px 24px;
+	padding: 54px 16px 24px 45px;
 	background-color: #ec6fe6;
 `;
 
@@ -44,6 +44,7 @@ const AnimeTitle = styled.Text`
 	color: #fff;
 	font-size: 18px;
 	font-weight: bold;
+	text-align: center;
 `;
 
 const Content = styled.ScrollView`
@@ -66,7 +67,7 @@ const AnimeDetails = ({
 		<StatusBar />
 		<Header>
 			<BackButton
-				onPress={() => navigation.navigate('Home')}
+				onPress={() => navigation.goBack()}
 			>
 				<BackIcon source={backIcon} />
 			</BackButton>

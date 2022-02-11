@@ -42,14 +42,7 @@ const SearchIcon = styled.Image`
 	width: 100%;
 `;
 
-const AnimeButton = styled.TouchableWithoutFeedback`
-	align-items: center;
-	justify-content: flex-start;
-	width: ${Dimensions.get('window').width * .9}px;
-	height: ${Dimensions.get('window').height - 32}px;
-	margin: 0 ${Dimensions.get('window').width * .025}px;
-	margin-top: 24px;
-`;
+const AnimeButton = styled.TouchableWithoutFeedback``;
 
 const AnimeItem = styled.View`
 	align-items: center;
