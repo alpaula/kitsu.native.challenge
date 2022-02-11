@@ -26,8 +26,8 @@ const App = () => {
         id: anime.id,
         title: anime.attributes.canonicalTitle,
         synopsis: anime.attributes.synopsis,
-        posterImage: anime.attributes.posterImage.small,
-        coverImage: anime.attributes.coverImage.small,
+        posterImage: anime.attributes.posterImage?.small,
+        coverImage: anime.attributes.coverImage?.small,
         videoId: anime.attributes.youtubeVideoId
       }))
 
@@ -61,6 +61,7 @@ const App = () => {
         >
           {props => <Search
             {...props}
+            setSelectedAnime={setSelectedAnime}
           />}
         </Stack.Screen>
         <Stack.Screen
